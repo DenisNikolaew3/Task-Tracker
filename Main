@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp5
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            bool exit = false;
+            TaskManager manager = new TaskManager();
+
+            while (!exit)
+            {
+                Console.WriteLine("=======Task Tracker=======");
+                Console.WriteLine("1. Добавить задачу");
+                Console.WriteLine("2. Удалить задачу");
+                Console.WriteLine("3. Показать имеющиеся задачи");
+                Console.WriteLine("4. Поиск названия задачи");
+                Console.WriteLine("5. Сортировка задачи");
+                Console.WriteLine("6. Сохранить в файл");
+                Console.WriteLine("7. Вывести выполненые задачи");
+                Console.WriteLine("0. Выход");
+                Console.Write("Ваш выбор: ");
+
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "0":
+                        exit = true;
+                        break;
+                    case "1":
+                        manager.AddTask();
+                        break;
+                    case "2":
+                        manager.removeTask(); 
+                        break;
+                    case "3":
+                        manager.ShowTasks();
+                        break;
+                    case "4":
+                        manager.SearchTitle();
+                        break;
+                    case "5":
+                        manager.sortTasks();
+                        break;
+                    case "6":
+                        manager.saveFile();
+                        break;
+                    case "7":
+                        manager.isCompleted();
+                        break;
+                    default:
+                        Console.WriteLine("Неверный пункт меню");
+                        break;
+                }
+                Console.WriteLine();
+            }
+        }
+
+    }
+}
