@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
+
+namespace ConsoleApp5
+{
+    internal class TaskItem
+    {
+        public int Id { get; set; }
+
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        public string Category { get; set; }
+
+        public int Priority { get; set; }
+
+        public DateTime DeadLine { get; set; }
+
+        public bool IsCompleted { get; set; }
+
+        public TaskItem(int id, string title, string description, string category, int priority, DateTime deadLine, bool isCompleted = false) 
+        {
+            Id = id;
+            Title = title;
+            Description = description;
+            Category = category;
+            Priority = priority;
+            DeadLine = deadLine;
+            IsCompleted = isCompleted = false;
+        }
+
+        public void PrintInfo()
+        {
+            Console.WriteLine("=====================================");
+            Console.WriteLine($"ID: {Id}");
+            Console.WriteLine($"Название: {Title}");
+            Console.WriteLine($"Описание: {Description}");
+            Console.WriteLine($"Категоря: {Category}");
+            Console.WriteLine($"Приоритет: {Priority}");
+            Console.WriteLine($"Дедлайн: {DeadLine}");
+            Console.WriteLine($"Задача выолнена: {IsCompleted}");
+            Console.WriteLine("=====================================");
+        }
+    }
+}
