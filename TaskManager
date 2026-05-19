@@ -1,0 +1,198 @@
+using System;
+using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
+
+namespace ConsoleApp5
+{
+    internal class TaskManager
+    {
+        public List<TaskItem> taks = new List<TaskItem>();
+        public int NextId = 1;
+
+        public void AddTask()
+        {
+            Console.WriteLine("Введите название задачи: ");
+            string title = Console.ReadLine();
+
+            Console.WriteLine("Введите описание: ");
+            string description = Console.ReadLine();
+
+            Console.WriteLine("Введите категорию: ");
+            string category = Console.ReadLine();
+
+            Console.WriteLine("Введите приоритет: ");
+            Console.WriteLine("1 - High");
+            Console.WriteLine("3 - midle");
+            Console.WriteLine("5 - low");
+            int priority = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Введите дедлайн (dd.MM.yyyy): ");
+            DateTime deadline;
+
+            while (!DateTime.TryParse(Console.ReadLine(), out deadline))
+            {
+                Console.WriteLine("Неверно введена дата!");
+            }
+
+            TaskItem tak = new TaskItem(NextId, title, description, category, priority, deadline);
+            taks.Add(tak);
+            NextId++;
+            Console.WriteLine("Задача добавлена");
+        }
+
+
+        public void removeTask()
+        {
+            Console.WriteLine("Введите ID задачи: ");
+            int id;
+
+            if (!int.TryParse(Console.ReadLine(), out id))
+            {
+                Console.WriteLine("Некорректный ID");
+                return;
+            }
+
+            bool found = false;
+            for (int i = 0; i < taks.Count; i++)
+            {
+                if (taks[i].Id == id)
+                {
+                    taks.RemoveAt(i);
+                    Console.WriteLine("Задача удалена");
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                Console.WriteLine("Задача с указанным ID не найдена");
+            }
+        }
+
+
+        public void SearchTitle()
+        {
+            Console.WriteLine("Введите название задачи: ");
+            string title = Console.ReadLine();
+            bool founded = false;
+            foreach (TaskItem tak in taks)
+            {
+                if (tak.Title.ToLower() == title.ToLower())
+                {
+                    founded = true;
+                    tak.PrintInfo();
+                }
+
+                if (!founded)
+                {
+                    Console.WriteLine("Задача не найдена");
+                }
+            }
+        }
+
+        public void sortTasks()
+        {
+
+            Console.WriteLine("1. Сортировка по дедлайну");
+            Console.WriteLine("2. Сортировка по приоритету");
+            string choice = Console.ReadLine();
+
+            if (choice == "1")
+            {
+                for (int i = 0; i < taks.Count; i++)
+                {
+                    for (int j = 0; j < taks.Count; j++)
+                    {
+                        if (taks[i].DeadLine > taks[j].DeadLine)
+                        {
+                            TaskItem temp = taks[i];
+                            taks[i] = taks[j];
+                            taks[j] = temp;
+                        }
+                    }
+                }
+                Console.WriteLine("Все успешно");
+                ShowTasks();
+            }
+            else if (choice == "2")
+            {
+                for (int i = 0; i < taks.Count; i++)
+                {
+                    for (int j = 0; j < taks.Count; j++)
+                    {
+                        if (taks[i].Priority > taks[j].Priority)
+                        {
+                            TaskItem temp = taks[i];
+                            taks[i] = taks[j];
+                            taks[j] = temp;
+                        }
+                    }
+                }
+            }
+            Console.WriteLine("Все успешно");
+            ShowTasks();
+
+        }
+
+        public void ShowTasks()
+        {
+            if (taks.Count == 0)
+            {
+                Console.WriteLine("Все пусто");
+
+            }
+            foreach (TaskItem tak in taks)
+            {
+                tak.PrintInfo();
+            }
+        }
+
+        public void saveFile()
+        {
+            List<string> files = new List<string>();
+
+            foreach (TaskItem tak in taks)
+            {
+                string line =
+                tak.Id + ": " +
+                tak.Title + ": " +
+                tak.Description + ": " +
+                tak.Category + ": " +
+                tak.DeadLine + ": ";
+
+                files.Add(line);
+            }
+            File.WriteAllLines("tasks.xml", files);
+            Console.WriteLine("Файл сохранен");
+        }
+    
+
+    public void isCompleted()
+        {
+            Console.WriteLine("Введите id: ");
+            int id;
+
+            if (int.TryParse(Console.ReadLine(), out id))
+            {
+                Console.WriteLine("Неверный ID");
+                return;
+            }
+            for (int i = 0; i < taks.Count; i++)
+            {
+                if (taks[i].Id == id)
+                {
+                    taks[i].IsCompleted = true;
+                    Console.WriteLine("Задача выполнена");
+                    return;
+                }
+            }
+            Console.WriteLine("Задача не найдена");
+        }
+    }
+}
